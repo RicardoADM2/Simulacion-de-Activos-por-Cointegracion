@@ -14,3 +14,5 @@ logdata.plot(figsize=(12,6))
 #logprice es lo que es mas util al usar cointegracion ya que 
 plt.ylabel('Price')
 plt.show()
+# Con esto simplemente he descargado la evolucion de dos activos, considerado el logprice 
+#and charted it 
