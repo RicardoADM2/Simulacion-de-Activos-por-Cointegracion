@@ -26,4 +26,31 @@ plt.show()
 #Ahora hacemos el test de adf
 
 adftest=stm.adfuller(spread)
-print(adftest)
+print(adftest) # p-value de 0.0432 por lo que es estacionario con un 95% de confianza 
+
+# Ahora necesitamos hacer el half-life test para determinar el tiemp de mean-reversion
+y=spread.diff().dropna() # calcula la diferencia del spread 
+#dropna() es para eliminar los valores nulos (en este es el primero ya que no hay cambio)
+z=sm.add_constant(spread.shift(1).dropna()) #mismo proceso de constante pero con el valor nuevo 
+hfmodel=sm.OLS(y, z).fit() # OLS con el spread y su diferencia 
+hfhedge_ratio=hfmodel.params[z.columns[1]]
+print("hf:",hfhedge_ratio)
+
+
+half_life = -np.log(2) /hfhedge_ratio # calculo del half-life con la formula 
+# es la misma formula que se usa para calcular radioactive decay 
+print("Half-life of mean reversion: ", half_life)
+
+#Ahora vamos a usar un rolling window para calcular el rolling z-score 
+#voy a usar un window de 120 dias (half-life of mean reversion) 
+
+rollingmean=spread.rolling(window=120).mean() #rolling mean del spread
+rollingstd=spread.rolling(window=120).std()  #STANDARD DEVIATION DEL SPREAD EN EL WINDOW 
+
+zscore=(spread-rollingmean)/rollingstd.dropna() # formula ggez
+plot=zscore.plot(figsize=(12,6), title="Z-SCORE OF SPREAD") 
+plt.axhline(y=-1.5, color='r', linestyle=':', label='buy') 
+plt.axhline(y=1.5, color='g', linestyle=':', label='sell') 
+plt.legend()
+plt.show()
+print("z-score",zscore)
