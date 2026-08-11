@@ -1,4 +1,9 @@
-Ongoing project dedicated to the simulation of assets using cointegration between two tickers or a basket.
+Ongoing project applying cointegration and mean-reversion modeling to financial 
+asset pairs, motivated by parallels between stochastic mean-reversion (Ornstein-
+Uhlenbeck processes) and concepts from physics such as the damped harmonic 
+oscillator.
+
+Current analysis: GLD/SLV pair.
 
 Current state:
 - Engle-Granger test between two tickers: cointegration is tested using an OLS regression to calculate the spread, which
