@@ -54,3 +54,8 @@ plt.axhline(y=1.5, color='g', linestyle=':', label='sell')
 plt.legend()
 plt.show()
 print("z-score",zscore)
+
+#Una vez tengo el z-score, podria hacer el backtest de la estrategia. Sin embargo, prefiero 
+#hacer una division en periodos para verificar la estacionaridad el spread y la relacion de 
+#cointegracion 
+
