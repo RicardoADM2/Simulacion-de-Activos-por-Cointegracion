@@ -10,7 +10,6 @@ the spread has moved from its mean, returning buy and sell signals
 - Refactored pipeline into reusable functions 
 
 Future workpath: 
-- Refactor pipeline into reusable functions
 - Sub-period stability check (does cointegration hold across sub-samples?)
 - Simple backtest using z-score thresholds
 - Transaction costs / slippage
