@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import statsmodels.tsa.stattools as stm
 
 
-data=yf.download(["GLD","SLV"], start='2015-01-01', auto_adjust=True)["Close"] 
+data=yf.download(["GLD","SLV"], start='2010-01-01', auto_adjust=True)["Close"] 
 #Descarga de precios 
 logdata=np.log(data) #Convierto los precios a logprices para medir el spread 
 #Aqui empiezo el modelo de regresion OLS 
@@ -47,10 +47,11 @@ print("Half-life of mean reversion: ", half_life)
 rollingmean=spread.rolling(window=120).mean() #rolling mean del spread
 rollingstd=spread.rolling(window=120).std()  #STANDARD DEVIATION DEL SPREAD EN EL WINDOW 
 
-zscore=(spread-rollingmean)/rollingstd.dropna() # formula ggez
+zscore=(spread-rollingmean)/rollingstd # formula ggez
 plot=zscore.plot(figsize=(12,6), title="Z-SCORE OF SPREAD") 
-plt.axhline(y=-1.5, color='r', linestyle=':', label='buy') 
-plt.axhline(y=1.5, color='g', linestyle=':', label='sell') 
+plt.axhline(y=-1.5, color='r', linestyle=':', label='Long spread') 
+plt.axhline(y=1.5, color='g', linestyle=':', label='Short spread') 
+plt.axhline(y=0, color='g', linestyle=':', label='Exit') 
 plt.legend()
 plt.show()
 print("z-score",zscore)
@@ -59,3 +60,27 @@ print("z-score",zscore)
 #hacer una division en periodos para verificar la estacionaridad el spread y la relacion de 
 #cointegracion 
 
+#En este caso, al tener datos desde 2015, la division sera en periodos de 2 trading years
+#(500 days) 
+
+from statsmodels.regression.rolling import RollingOLS 
+
+#para usar el window , uso una funcion ya existente rollingols 
+model=RollingOLS(logdata["GLD"], X, window=500).fit()
+rollinghedge_ratio=model.params["SLV"]
+print("rolling hedge ratio:", rollinghedge_ratio)
+
+rollingspread = logdata["GLD"] - rollinghedge_ratio * logdata["SLV"]
+rollingspread.plot(figsize=(12,6), title="Rolling Spread")
+plt.show()
+
+#el spread es mucho mayor de lo que esperaba, por lo que voy a volvr a ahcer el adf test 
+#sobre el rolling spread 
+
+rollingadftest=stm.adfuller(rollingspread.dropna())
+print("rolling adf test:" ,rollingadftest) 
+
+# We find a p-value of 0.731, so stationarity is confirmed up to a 10% confidence interval. 
+# the stationarity confidence is lower through a rolling window than in a long window, 
+# for this reason, it merits a kalman filter application to study the relation across time,
+# as it is giving signs of time-dependent cointegration

@@ -4,7 +4,7 @@
 
 
 
-def calc_hedge_ratio(t_1,t_2,sdate)
+def calc_hedge_ratio(t_1,t_2,sdate):
 
 
     data=yf.download([t_1,t_2], start=sdate, auto_adjust=True)["Close"] 
@@ -17,6 +17,7 @@ def calc_hedge_ratio(t_1,t_2,sdate)
     hedge_ratio=model.params[t_2]
     print(hedge_ratio)
 
-    spread = logdata[t_2] - hedge_ratio * logdata[t_1]
+    spread = logdata[t_1] - hedge_ratio * logdata[t_2]
     spread.plot(figsize=(12,6), title="Spread")
     plt.show()
+    return spread 
