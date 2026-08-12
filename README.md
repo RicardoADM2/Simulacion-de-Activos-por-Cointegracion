@@ -12,10 +12,10 @@ then is passed through an ADF test to determine cointegration to confidence valu
 a deviation
 - Rolling z-score: using a predetermined timeframe and the spread, a z-score is calculated for the spread. This data point reveals how many standard deviations
 the spread has moved from its mean, returning buy and sell signals
-- Refactored pipeline into reusable functions 
+- Refactored pipeline into reusable functions
+- - Sub-period stability check 
 
 Future workpath: 
-- Sub-period stability check (does cointegration hold across sub-samples?)
 - Simple backtest using z-score thresholds
 - Transaction costs / slippage
 - Walk-forward validation (train on early period, test on unseen later period)
