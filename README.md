@@ -13,7 +13,7 @@ a deviation
 - Rolling z-score: using a predetermined timeframe and the spread, a z-score is calculated for the spread. This data point reveals how many standard deviations
 the spread has moved from its mean, returning buy and sell signals
 - Refactored pipeline into reusable functions
-- - Sub-period stability check 
+- Sub-period stability check 
 
 Future workpath: 
 - Simple backtest using z-score thresholds
@@ -39,5 +39,4 @@ Future workpath:
 - Backtest, walk-forward, Sharpe/drawdown for static vs. Kalman, pairs vs. basket
 - Benchmark against buy-and-hold
 - Structural break / regime stability analysis
-- Final README with full methodology, results table, and limitations
-- `requirements.txt`, basic `pytest` coverage, docstring
+- 
